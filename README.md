@@ -103,8 +103,18 @@ is already transcribed into `data/`, so a fresh clone runs fine without them.
   without losing anything. The picker shows "In progress — n of 31 answered" or
   your score for a finished paper (times included). Export the lot from the picker
   if you want a copy that git and a browser wipe cannot take away.
+- **Mid-term scope labels.** The three past papers (`2021S1`, `2122S1`,
+  `2223S1`) are tagged against the lectures 1–5 scope sheet. A question that
+  touches anything off-syllabus (lists, dicts, sets, files, `turtle`, `math`,
+  …) carries a small pill at the top right of its header — `OUT OF SCOPE`,
+  the level, and a one-line reason — and the same pill on its results card.
+  In-scope questions are left clean. Hovering the pill shows the full reason.
 - **Filter**, **flag**, **jump-to-question**, and keyboard shortcuts
-  (`←` / `→` to move, `F` to flag, `Esc` to close menus).
+  (`←` / `→` to move, `F` to flag, `Esc` to close menus). The FILTER rail has a
+  **MID-TERM SCOPE** group that narrows the paper to *in scope*, *out of scope*,
+  or any single level: **totally** (the question is only about the off-syllabus
+  item), **crucially** (you must understand that item to answer), or **slightly**
+  (the item is incidental — the tested idea is in the lectures).
 
 ## Layout
 
@@ -210,3 +220,7 @@ non-empty answer should be accepted.
 - **AY 2021/2022 Q23** is flawed in the source: the code actually tests for an
   ascending (non-decreasing) list, which none of the options states. **A** is
   recorded as the key and the explanation says so.
+- **Scope tags** (the `scope: { level, reason }` field) exist only on the three
+  added past papers, which is where the lectures 1–5 scope sheet applies. The
+  other six papers are practice / future papers and are left untagged, so the
+  scope filters naturally show every question of those as *in scope*.

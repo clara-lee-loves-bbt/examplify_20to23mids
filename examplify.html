@@ -234,6 +234,14 @@ button { font-family: inherit; cursor: pointer; }
 }
 .rail-filter-panel button:hover { background: #EDF4F8; }
 .rail-filter-panel button.active { background: #E2F0F8; font-weight: 600; }
+.rail-filter-sep { height: 1px; background: #DCE4EA; margin: 6px 8px; }
+.rail-filter-group {
+  font-size: 10.5px; font-weight: 700; letter-spacing: .9px; text-transform: uppercase;
+  color: #8A9AA6; padding: 6px 12px 4px;
+}
+.rail-filter-panel button.sub {
+  font-size: 13px; color: #5A6B78; padding: 7px 12px 7px 24px;
+}
 
 /* main */
 .main { flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; position: relative; }
@@ -259,6 +267,35 @@ button { font-family: inherit; cursor: pointer; }
   font-size: 23px; line-height: 17px; letter-spacing: 1px; color: var(--ink-strong);
   padding: 0 7px; height: 17px; display: flex; align-items: center;
 }
+
+/* subtle out-of-syllabus marker, sits at the top right of the question head */
+.scope-badge {
+  display: inline-flex; align-items: center; gap: 7px; max-width: 340px;
+  font-size: 10.5px; line-height: 1; padding: 5px 10px; border-radius: 30px;
+  background: #FBF6EA; border: 1px solid #EADCB8; color: #8A6D24;
+  white-space: nowrap; overflow: hidden; cursor: default; flex: none;
+}
+.scope-badge .scope-tag {
+  font-weight: 700; letter-spacing: .9px; text-transform: uppercase; flex: none;
+}
+.scope-badge .scope-level {
+  font-style: italic; text-transform: lowercase; opacity: .85; flex: none;
+}
+.scope-badge .scope-level::after { content: ""; }
+.scope-badge .scope-why {
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  color: #9A8347; font-size: 11px;
+}
+.scope-badge.slight { background: #F4F6F8; border-color: #DCE3E9; color: #6C7C89; }
+.scope-badge.slight .scope-why { color: #8496A3; }
+.scope-badge.crucial { background: #FDF3E9; border-color: #F0D6B4; color: #A0601F; }
+.scope-badge.crucial .scope-why { color: #B47A3C; }
+.scope-badge.total { background: #FBEEEE; border-color: #EECBCB; color: #A03B3B; }
+.scope-badge.total .scope-why { color: #B46A6A; }
+
+/* in the review list the badge may wrap onto its own line and show in full */
+.review-card-head .scope-badge { max-width: none; white-space: normal; }
+.review-card-head .scope-badge .scope-why { white-space: normal; overflow: visible; text-overflow: clip; }
 
 .q-scroll {
   flex: 1 1 auto; overflow-y: auto; padding: 18px 29px 40px 29px;
@@ -1024,11 +1061,18 @@ button { font-family: inherit; cursor: pointer; }
         <button type="button" data-filter="unanswered">Unanswered</button>
         <button type="button" data-filter="mcq">Multiple choice</button>
         <button type="button" data-filter="fib">Fill in the blank</button>
+        <div class="rail-filter-sep"></div>
+        <div class="rail-filter-group">Mid-term scope</div>
+        <button type="button" data-filter="outofscope">Out of scope</button>
+        <button type="button" class="sub" data-filter="scope-total">Totally out of scope</button>
+        <button type="button" class="sub" data-filter="scope-crucial">Crucially out of scope</button>
+        <button type="button" class="sub" data-filter="scope-slight">Slightly out of scope</button>
+        <button type="button" data-filter="inscope">In scope</button>
       </div>
     </aside>
 
     <main class="main" id="main">
-      <div class="q-head">
+      <div class="q-head" id="q-head">
         <div class="q-head-left">
           <span class="q-label" id="q-label">Question 1</span>
           <button class="q-label-chev" id="q-jump" type="button" title="Jump to question">&#8964;</button>
@@ -3790,6 +3834,7 @@ registerExam({
     },
     {
       n: 8, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal — lists are not in the midterm scope' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [(1, 2, (3, 4)), (5, (6))][1][-1]' }
@@ -3803,6 +3848,7 @@ registerExam({
     },
     {
       n: 9, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about the list() built-in' },
       stem: [
         { p: 'Evaluate:' },
         { code: ">>> list((1)) + list([2]) + list('3')" }
@@ -3831,6 +3877,7 @@ registerExam({
 
     {
       n: 11, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about the turtle module' },
       stem: [
         { p: 'What will the following code draw? (In the original paper the four options are pictures: a) a regular pentagon, b) a five-pointed star, c) a regular hexagon, d) a triangle.)' },
         { code: 'from turtle import *\ndef drawSomething():\n    for _ in range(6):\n        fd(100)\n        rt(360 - 360 // 5)\n    ht() # hiding the turtle cursor\ndrawSomething()' }
@@ -3847,6 +3894,7 @@ registerExam({
     },
     {
       n: 12, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about mutating a list in place' },
       stem: [
         { p: 'What is the output of the following code?' },
         { code: 'def doubleSeq(l):\n    for i in range(len(l) // 2):\n        l[i] //= 2\n    return l\n\nprint(doubleSeq([1, 2, 3, 4, 5, 6]))' }
@@ -3861,6 +3909,7 @@ registerExam({
     },
     {
       n: 13, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'you must know lists are mutable and aliased' },
       stem: [
         { p: 'What is the output of the following code?' },
         { code: 't1 = [1, 2, 3]\nt2 = (t1, t1)\nt2[0][2] = 0\nprint(t2)' }
@@ -3916,6 +3965,7 @@ registerExam({
     },
     {
       n: 17, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'wraps the result in a list literal' },
       stem: [
         { p: 'What is the output of the following code?' },
         { code: 'def foo(x, y):\n    return lambda z: z - x + y\nprint([foo(1, 2)(3)])' }
@@ -3955,6 +4005,7 @@ registerExam({
     },
     {
       n: 20, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'needs list.remove() to see the infinite loop' },
       stem: [
         { p: 'What is true about the following code if the input `lst` is a list of integers with length more than 1?' },
         { code: 'def foo(lst):\n    while len(lst) > 1:\n        for i in lst[1:]:\n            if lst[0] >= i:\n                lst.remove(lst[0])\n    return lst[0]' }
@@ -3971,6 +4022,7 @@ registerExam({
     },
     {
       n: 21, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'needs list.remove() to see the sorted result' },
       stem: [
         { p: 'What is the functionality of the following code if the input `lst` is a list of integers with length more than 3?' },
         { code: 'def foo(lst):\n    if not lst:\n        return []\n    a = min(lst)\n    lst.remove(a)\n    return [a] + foo(lst)' }
@@ -3988,6 +4040,7 @@ registerExam({
 
     {
       n: 22, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'd is built with list() and sliced as a list' },
       stem: [
         { p: 'Consider the following buggy function that takes a non-empty sequence of integers as its argument.' },
         { code: '1  def chking(seq):\n2      d = list(seq)\n3      b = len(seq)\n4      for a in range(b - 1):\n5          for i in d:\n6              if i == d[a:b]:\n7                  return False\n8              elif i >= max(d[a + 1:b]):\n9                 return True\n10             else:\n11                return False\n12     return True' },
@@ -4002,6 +4055,7 @@ registerExam({
     },
     {
       n: 23, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses math.sqrt, which is not in the scope list' },
       stem: [
         { p: 'What will be the range of the input `x` that will crash this function `foo()`, assuming the input `x` is always an integer?' },
         { code: 'from math import sqrt\ndef foo(x):\n    return x > 0 and sqrt(x + 3) < 10' }
@@ -4016,6 +4070,7 @@ registerExam({
     },
     {
       n: 24, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about turtle drawing' },
       stem: [
         { p: 'The target picture is six spokes radiating from one point (a "*" shape). Which option below would draw it? (In the original paper the three boxes are: **a)** `fd(100); bk(100); rt(360 // 6)`, **b)** `bk(100); rt(360 // 6); fd(100)`, **c)** `bk(100); fd(100); rt(360 // 6)`.)' },
         { code: 'from turtle import *\ndef drawSomething():\n    for _ in range(6):\n        ??? # Missing line\n        ??? # Missing line\n        ??? # Missing line\nht()\ndrawSomething()' }
@@ -4032,6 +4087,7 @@ registerExam({
     },
     {
       n: 25, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'the worked example is a list' },
       stem: [
         { p: 'Given a sorted ascending sequence of numbers with length > 1, we want to find the first largest gap between two consecutive numbers. For example `>>> firstLargestGap([1, 3, 5, 7, 19, 21, 22, 24, 36, 39])` returns 12, the gap between 7 and 19. Here is the code:' },
         { code: 'def firstLargestGap(l):\n    ans = -1\n    ???????????????????????? # The missing line\n        gap = l[i + 1] - l[i]\n        if gap > ans:\n            ans = gap\n    return ans' },
@@ -4137,6 +4193,7 @@ registerExam({
     },
     {
       n: 6, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'calls math.sqrt, which is not in the scope list' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> (True != False) or (sqrt(-1))' }
@@ -4150,6 +4207,7 @@ registerExam({
     },
     {
       n: 7, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal — lists are not in the midterm scope' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [1, 2, 3, 4, 5, 6][1:5][:2]' }
@@ -4163,6 +4221,7 @@ registerExam({
     },
     {
       n: 8, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about the list() built-in' },
       stem: [
         { p: 'Evaluate:' },
         { code: ">>> list(['abc']) + list(('k', 'z'))" }
@@ -4177,6 +4236,7 @@ registerExam({
     },
     {
       n: 9, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'nested list literals drive the indexing drill' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [5, [3], [2, 3]][[2, 1][0]][:[1, 2][1]]' }
@@ -4278,6 +4338,7 @@ registerExam({
     },
     {
       n: 17, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal as the sequence' },
       stem: [
         { code: 'x = [1, 2, 3]\ndef foo(l, x):\n    if not l:\n        return l\n    return foo(l[1:], x) + [x(l[0])]\nprint(foo(x, lambda x: 4 - x))' }
       ],
@@ -4290,6 +4351,7 @@ registerExam({
     },
     {
       n: 18, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary lookup' },
       stem: [
         { code: 'd = {0: 9, 1: 0, 2: 1, 3: 4, 4: 1, 5: 9, 6: 1}\na = 4\nwhile a in d:\n    a = d[a]\nprint(a)' }
       ],
@@ -4302,6 +4364,7 @@ registerExam({
     },
     {
       n: 19, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about building a dictionary' },
       stem: [
         { code: "lst1 = ['bc', 'de', 'ya', 'ab', 'bq', 'bd']\nd = {}\nfor x in lst1:\n    d[x[1]] = x[0]\nprint(d['b'])" }
       ],
@@ -4314,6 +4377,7 @@ registerExam({
     },
     {
       n: 20, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about set operations' },
       stem: [
         { code: "x = {'a', 'bc', 'de'}\ny = {'b', 'de', 'a', 'b'}\nprint(x ^ y)" }
       ],
@@ -4342,6 +4406,7 @@ registerExam({
     },
     {
       n: 22, marks: 1, type: 'fib',
+      scope: { level: 'slight', reason: 'indexes and slices a list argument' },
       stem: [
         { p: 'Given a list L with unique integers, `num_pair(L, N)` counts how many pairs of numbers in L have N as their sum. For example:' },
         { code: '>>> L = [75, 80, 90, 77, 88, 91, 60, 74, 73, 70, 55, 93, 59]\n>>> print(num_pair(L, 150))\n4\n>>> print(num_pair(L, 152))\n2' },
@@ -4358,6 +4423,7 @@ registerExam({
 
     {
       n: 23, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'needs list building (.append) and slicing to read the function' },
       stem: [
         { p: 'Given that L is a list of integers with length > 1, what does the call `foo(L, 0)` do?' },
         { code: 'def foo(lst, N):\n    l1 = lst[1:]\n    l2 = []\n    for i in range(len(l1)):\n        l2.append(l1[i] - lst[i])\n    return min(l2) >= N' }
@@ -4374,6 +4440,7 @@ registerExam({
     },
     {
       n: 24, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'you must know set() discards duplicates' },
       stem: [
         { p: 'Given two strings s1 and s2 with alphabets only, if we want to check if they are anagrams, which of the following methods is wrong?' }
       ],
@@ -4389,6 +4456,7 @@ registerExam({
     },
     {
       n: 25, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary keys' },
       stem: [
         { p: 'In a dictionary in Python, which of the following statements is true?' }
       ],
@@ -4532,6 +4600,7 @@ registerExam({
     },
     {
       n: 9, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'nested list literals drive the indexing drill' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [1, 2, [3, 4], 5, 6][[1, 2, 4][2]:[1, 2, 3, 4, 5][3]]' }
@@ -4633,6 +4702,7 @@ registerExam({
     },
     {
       n: 17, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal as the sequence' },
       stem: [
         { code: "x = ['a', 'b', 'c', 'd']\ndef foo(l, f):\n    if not l:\n        return l\n    return foo(f(l[1:]), f) + [f(l[0])]\nprint(foo(x, lambda x: x[::-1]))" }
       ],
@@ -4646,6 +4716,7 @@ registerExam({
     },
     {
       n: 18, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary chaining' },
       stem: [
         { code: "d = {0: 2, 1: 5, 2: 1, 3: 4, 4: 7, 5: 6, 6: 3, 3: 9}\na = 0\noutput = ''\nwhile a in d:\n    a = d[a]\n    output += str(a)\nprint(output)" }
       ],
@@ -4659,6 +4730,7 @@ registerExam({
     },
     {
       n: 19, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dict() built from pairs' },
       stem: [
         { code: "lst1 = ['bc', 'de', 'ya', 'ab', 'bq', 'bd']\nlst2 = []\nfor x in lst1:\n    lst2.append(tuple(x))\nd = dict(lst2)\nprint(d['b'])" }
       ],
@@ -4671,6 +4743,7 @@ registerExam({
     },
     {
       n: 20, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about set operators' },
       stem: [
         { code: "x = {'a', 'bc', 'de', 'a'}\ny = {'b', 'de', 'a', 'a', 'b'}\nprint(x | y - x ^ y)" }
       ],
@@ -4714,6 +4787,7 @@ registerExam({
 
     {
       n: 23, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about sorting a list in place' },
       stem: [
         { p: 'Given that the input L is a list of integers with `len(L) > 1`, what does the function `foo(L)` do?' },
         { code: 'def foo(L):\n    for i in range(len(L) - 1):\n        for j in range(len(L) - i - 1):\n            if L[j] > L[j + 1]:\n                L[j], L[j + 1] = L[j + 1], L[j]' }
@@ -4730,6 +4804,7 @@ registerExam({
     },
     {
       n: 24, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: "the whole question is about file mode 'r+'" },
       stem: [
         { p: 'If we open a file with the file mode `r+`, it means:' }
       ],
@@ -4745,6 +4820,7 @@ registerExam({
     },
     {
       n: 25, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary keys' },
       stem: [
         { p: 'How many of the following data types cannot be stored in the keys of a Python dictionary?' },
         { code: 'int\nfloat\nbool\nstring\nlist\ndict\ntuple\nset' }
@@ -4891,6 +4967,24 @@ registerExam({
       return esc(part);
     }).join('');
     return p;
+  }
+
+  /* ------------------------------------------------------- mid-term scope */
+  /* Questions may carry `scope: { level, reason }` when they use something the
+     mid-term lectures do not cover (lists, dicts, sets, files, turtle, ...).
+     level: 'slight'  — off-syllabus item is incidental; the tested idea is covered
+            'crucial' — you must understand the off-syllabus item to answer
+            'total'   — the question is entirely about an off-syllabus item */
+  var SCOPE_WORD = { slight: 'slightly', crucial: 'crucially', total: 'totally' };
+
+  function scopeBadge(scope) {
+    var b = el('span', 'scope-badge ' + scope.level);
+    b.title = 'Out of the mid-term scope (' + (SCOPE_WORD[scope.level] || scope.level) +
+              ' out of scope): ' + scope.reason;
+    b.appendChild(el('span', 'scope-tag', 'OUT OF SCOPE'));
+    b.appendChild(el('span', 'scope-level', SCOPE_WORD[scope.level] || scope.level));
+    b.appendChild(el('span', 'scope-why', scope.reason));
+    return b;
   }
 
   /* ------------------------------------------------------------------ state */
@@ -5209,6 +5303,11 @@ registerExam({
       if (railFilter === 'unanswered') return !answered(q);
       if (railFilter === 'mcq') return q.type === 'mcq';
       if (railFilter === 'fib') return q.type === 'fib';
+      if (railFilter === 'inscope') return !q.scope;
+      if (railFilter === 'outofscope') return !!q.scope;
+      if (railFilter === 'scope-total') return !!q.scope && q.scope.level === 'total';
+      if (railFilter === 'scope-crucial') return !!q.scope && q.scope.level === 'crucial';
+      if (railFilter === 'scope-slight') return !!q.scope && q.scope.level === 'slight';
       return true;
     });
 
@@ -5265,6 +5364,16 @@ registerExam({
     $('q-label').textContent = 'Question ' + q.n + '  (' + q.marks + ' mark' + (q.marks > 1 ? 's' : '') + ')';
     $('flag-btn').classList.toggle('on', !!session.flagged[q.n]);
     $('flag-btn').textContent = session.flagged[q.n] ? 'FLAGGED' : 'FLAG QUESTION';
+
+    // subtle out-of-scope label, top right of the question header
+    var head = $('q-head');
+    var stale = head.querySelector('.scope-badge');
+    if (stale) stale.parentNode.removeChild(stale);
+    if (q.scope) {
+      var badge = scopeBadge(q.scope);
+      var more = head.querySelector('.q-more-wrap');
+      if (more) head.insertBefore(badge, more); else head.appendChild(badge);
+    }
 
     // stem
     var stem = $('q-stem');
@@ -5545,6 +5654,7 @@ registerExam({
         r.state === 'ok' ? 'Correct' : r.state === 'bad' ? 'Incorrect' : 'Not answered');
       head.appendChild(v);
       head.appendChild(el('span', 'marks', r.marks + ' / ' + r.question.marks + ' marks'));
+      if (r.question.scope) head.appendChild(scopeBadge(r.question.scope));
       card.appendChild(head);
 
       if (r.given) {

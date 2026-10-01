@@ -123,6 +123,7 @@ registerExam({
     },
     {
       n: 9, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'nested list literals drive the indexing drill' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [1, 2, [3, 4], 5, 6][[1, 2, 4][2]:[1, 2, 3, 4, 5][3]]' }
@@ -224,6 +225,7 @@ registerExam({
     },
     {
       n: 17, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal as the sequence' },
       stem: [
         { code: "x = ['a', 'b', 'c', 'd']\ndef foo(l, f):\n    if not l:\n        return l\n    return foo(f(l[1:]), f) + [f(l[0])]\nprint(foo(x, lambda x: x[::-1]))" }
       ],
@@ -237,6 +239,7 @@ registerExam({
     },
     {
       n: 18, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary chaining' },
       stem: [
         { code: "d = {0: 2, 1: 5, 2: 1, 3: 4, 4: 7, 5: 6, 6: 3, 3: 9}\na = 0\noutput = ''\nwhile a in d:\n    a = d[a]\n    output += str(a)\nprint(output)" }
       ],
@@ -250,6 +253,7 @@ registerExam({
     },
     {
       n: 19, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dict() built from pairs' },
       stem: [
         { code: "lst1 = ['bc', 'de', 'ya', 'ab', 'bq', 'bd']\nlst2 = []\nfor x in lst1:\n    lst2.append(tuple(x))\nd = dict(lst2)\nprint(d['b'])" }
       ],
@@ -262,6 +266,7 @@ registerExam({
     },
     {
       n: 20, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about set operators' },
       stem: [
         { code: "x = {'a', 'bc', 'de', 'a'}\ny = {'b', 'de', 'a', 'a', 'b'}\nprint(x | y - x ^ y)" }
       ],
@@ -305,6 +310,7 @@ registerExam({
 
     {
       n: 23, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about sorting a list in place' },
       stem: [
         { p: 'Given that the input L is a list of integers with `len(L) > 1`, what does the function `foo(L)` do?' },
         { code: 'def foo(L):\n    for i in range(len(L) - 1):\n        for j in range(len(L) - i - 1):\n            if L[j] > L[j + 1]:\n                L[j], L[j + 1] = L[j + 1], L[j]' }
@@ -321,6 +327,7 @@ registerExam({
     },
     {
       n: 24, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: "the whole question is about file mode 'r+'" },
       stem: [
         { p: 'If we open a file with the file mode `r+`, it means:' }
       ],
@@ -336,6 +343,7 @@ registerExam({
     },
     {
       n: 25, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary keys' },
       stem: [
         { p: 'How many of the following data types cannot be stored in the keys of a Python dictionary?' },
         { code: 'int\nfloat\nbool\nstring\nlist\ndict\ntuple\nset' }

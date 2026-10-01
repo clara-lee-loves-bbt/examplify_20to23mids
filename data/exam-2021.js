@@ -109,6 +109,7 @@ registerExam({
     },
     {
       n: 8, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal — lists are not in the midterm scope' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [(1, 2, (3, 4)), (5, (6))][1][-1]' }
@@ -122,6 +123,7 @@ registerExam({
     },
     {
       n: 9, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about the list() built-in' },
       stem: [
         { p: 'Evaluate:' },
         { code: ">>> list((1)) + list([2]) + list('3')" }
@@ -150,6 +152,7 @@ registerExam({
 
     {
       n: 11, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about the turtle module' },
       stem: [
         { p: 'What will the following code draw? (In the original paper the four options are pictures: a) a regular pentagon, b) a five-pointed star, c) a regular hexagon, d) a triangle.)' },
         { code: 'from turtle import *\ndef drawSomething():\n    for _ in range(6):\n        fd(100)\n        rt(360 - 360 // 5)\n    ht() # hiding the turtle cursor\ndrawSomething()' }
@@ -166,6 +169,7 @@ registerExam({
     },
     {
       n: 12, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about mutating a list in place' },
       stem: [
         { p: 'What is the output of the following code?' },
         { code: 'def doubleSeq(l):\n    for i in range(len(l) // 2):\n        l[i] //= 2\n    return l\n\nprint(doubleSeq([1, 2, 3, 4, 5, 6]))' }
@@ -180,6 +184,7 @@ registerExam({
     },
     {
       n: 13, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'you must know lists are mutable and aliased' },
       stem: [
         { p: 'What is the output of the following code?' },
         { code: 't1 = [1, 2, 3]\nt2 = (t1, t1)\nt2[0][2] = 0\nprint(t2)' }
@@ -235,6 +240,7 @@ registerExam({
     },
     {
       n: 17, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'wraps the result in a list literal' },
       stem: [
         { p: 'What is the output of the following code?' },
         { code: 'def foo(x, y):\n    return lambda z: z - x + y\nprint([foo(1, 2)(3)])' }
@@ -274,6 +280,7 @@ registerExam({
     },
     {
       n: 20, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'needs list.remove() to see the infinite loop' },
       stem: [
         { p: 'What is true about the following code if the input `lst` is a list of integers with length more than 1?' },
         { code: 'def foo(lst):\n    while len(lst) > 1:\n        for i in lst[1:]:\n            if lst[0] >= i:\n                lst.remove(lst[0])\n    return lst[0]' }
@@ -290,6 +297,7 @@ registerExam({
     },
     {
       n: 21, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'needs list.remove() to see the sorted result' },
       stem: [
         { p: 'What is the functionality of the following code if the input `lst` is a list of integers with length more than 3?' },
         { code: 'def foo(lst):\n    if not lst:\n        return []\n    a = min(lst)\n    lst.remove(a)\n    return [a] + foo(lst)' }
@@ -307,6 +315,7 @@ registerExam({
 
     {
       n: 22, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'd is built with list() and sliced as a list' },
       stem: [
         { p: 'Consider the following buggy function that takes a non-empty sequence of integers as its argument.' },
         { code: '1  def chking(seq):\n2      d = list(seq)\n3      b = len(seq)\n4      for a in range(b - 1):\n5          for i in d:\n6              if i == d[a:b]:\n7                  return False\n8              elif i >= max(d[a + 1:b]):\n9                 return True\n10             else:\n11                return False\n12     return True' },
@@ -321,6 +330,7 @@ registerExam({
     },
     {
       n: 23, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses math.sqrt, which is not in the scope list' },
       stem: [
         { p: 'What will be the range of the input `x` that will crash this function `foo()`, assuming the input `x` is always an integer?' },
         { code: 'from math import sqrt\ndef foo(x):\n    return x > 0 and sqrt(x + 3) < 10' }
@@ -335,6 +345,7 @@ registerExam({
     },
     {
       n: 24, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about turtle drawing' },
       stem: [
         { p: 'The target picture is six spokes radiating from one point (a "*" shape). Which option below would draw it? (In the original paper the three boxes are: **a)** `fd(100); bk(100); rt(360 // 6)`, **b)** `bk(100); rt(360 // 6); fd(100)`, **c)** `bk(100); fd(100); rt(360 // 6)`.)' },
         { code: 'from turtle import *\ndef drawSomething():\n    for _ in range(6):\n        ??? # Missing line\n        ??? # Missing line\n        ??? # Missing line\nht()\ndrawSomething()' }
@@ -351,6 +362,7 @@ registerExam({
     },
     {
       n: 25, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'the worked example is a list' },
       stem: [
         { p: 'Given a sorted ascending sequence of numbers with length > 1, we want to find the first largest gap between two consecutive numbers. For example `>>> firstLargestGap([1, 3, 5, 7, 19, 21, 22, 24, 36, 39])` returns 12, the gap between 7 and 19. Here is the code:' },
         { code: 'def firstLargestGap(l):\n    ans = -1\n    ???????????????????????? # The missing line\n        gap = l[i + 1] - l[i]\n        if gap > ans:\n            ans = gap\n    return ans' },

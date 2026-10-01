@@ -83,6 +83,7 @@ registerExam({
     },
     {
       n: 6, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'calls math.sqrt, which is not in the scope list' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> (True != False) or (sqrt(-1))' }
@@ -96,6 +97,7 @@ registerExam({
     },
     {
       n: 7, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal — lists are not in the midterm scope' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [1, 2, 3, 4, 5, 6][1:5][:2]' }
@@ -109,6 +111,7 @@ registerExam({
     },
     {
       n: 8, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about the list() built-in' },
       stem: [
         { p: 'Evaluate:' },
         { code: ">>> list(['abc']) + list(('k', 'z'))" }
@@ -123,6 +126,7 @@ registerExam({
     },
     {
       n: 9, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'nested list literals drive the indexing drill' },
       stem: [
         { p: 'Evaluate:' },
         { code: '>>> [5, [3], [2, 3]][[2, 1][0]][:[1, 2][1]]' }
@@ -224,6 +228,7 @@ registerExam({
     },
     {
       n: 17, marks: 1, type: 'mcq',
+      scope: { level: 'slight', reason: 'uses a list literal as the sequence' },
       stem: [
         { code: 'x = [1, 2, 3]\ndef foo(l, x):\n    if not l:\n        return l\n    return foo(l[1:], x) + [x(l[0])]\nprint(foo(x, lambda x: 4 - x))' }
       ],
@@ -236,6 +241,7 @@ registerExam({
     },
     {
       n: 18, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary lookup' },
       stem: [
         { code: 'd = {0: 9, 1: 0, 2: 1, 3: 4, 4: 1, 5: 9, 6: 1}\na = 4\nwhile a in d:\n    a = d[a]\nprint(a)' }
       ],
@@ -248,6 +254,7 @@ registerExam({
     },
     {
       n: 19, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about building a dictionary' },
       stem: [
         { code: "lst1 = ['bc', 'de', 'ya', 'ab', 'bq', 'bd']\nd = {}\nfor x in lst1:\n    d[x[1]] = x[0]\nprint(d['b'])" }
       ],
@@ -260,6 +267,7 @@ registerExam({
     },
     {
       n: 20, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about set operations' },
       stem: [
         { code: "x = {'a', 'bc', 'de'}\ny = {'b', 'de', 'a', 'b'}\nprint(x ^ y)" }
       ],
@@ -288,6 +296,7 @@ registerExam({
     },
     {
       n: 22, marks: 1, type: 'fib',
+      scope: { level: 'slight', reason: 'indexes and slices a list argument' },
       stem: [
         { p: 'Given a list L with unique integers, `num_pair(L, N)` counts how many pairs of numbers in L have N as their sum. For example:' },
         { code: '>>> L = [75, 80, 90, 77, 88, 91, 60, 74, 73, 70, 55, 93, 59]\n>>> print(num_pair(L, 150))\n4\n>>> print(num_pair(L, 152))\n2' },
@@ -304,6 +313,7 @@ registerExam({
 
     {
       n: 23, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'needs list building (.append) and slicing to read the function' },
       stem: [
         { p: 'Given that L is a list of integers with length > 1, what does the call `foo(L, 0)` do?' },
         { code: 'def foo(lst, N):\n    l1 = lst[1:]\n    l2 = []\n    for i in range(len(l1)):\n        l2.append(l1[i] - lst[i])\n    return min(l2) >= N' }
@@ -320,6 +330,7 @@ registerExam({
     },
     {
       n: 24, marks: 1, type: 'mcq',
+      scope: { level: 'crucial', reason: 'you must know set() discards duplicates' },
       stem: [
         { p: 'Given two strings s1 and s2 with alphabets only, if we want to check if they are anagrams, which of the following methods is wrong?' }
       ],
@@ -335,6 +346,7 @@ registerExam({
     },
     {
       n: 25, marks: 1, type: 'mcq',
+      scope: { level: 'total', reason: 'the whole question is about dictionary keys' },
       stem: [
         { p: 'In a dictionary in Python, which of the following statements is true?' }
       ],

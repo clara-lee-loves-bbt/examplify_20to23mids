@@ -93,11 +93,18 @@
         <button type="button" data-filter="unanswered">Unanswered</button>
         <button type="button" data-filter="mcq">Multiple choice</button>
         <button type="button" data-filter="fib">Fill in the blank</button>
+        <div class="rail-filter-sep"></div>
+        <div class="rail-filter-group">Mid-term scope</div>
+        <button type="button" data-filter="outofscope">Out of scope</button>
+        <button type="button" class="sub" data-filter="scope-total">Totally out of scope</button>
+        <button type="button" class="sub" data-filter="scope-crucial">Crucially out of scope</button>
+        <button type="button" class="sub" data-filter="scope-slight">Slightly out of scope</button>
+        <button type="button" data-filter="inscope">In scope</button>
       </div>
     </aside>
 
     <main class="main" id="main">
-      <div class="q-head">
+      <div class="q-head" id="q-head">
         <div class="q-head-left">
           <span class="q-label" id="q-label">Question 1</span>
           <button class="q-label-chev" id="q-jump" type="button" title="Jump to question">&#8964;</button>

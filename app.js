@@ -130,6 +130,24 @@
     return p;
   }
 
+  /* ------------------------------------------------------- mid-term scope */
+  /* Questions may carry `scope: { level, reason }` when they use something the
+     mid-term lectures do not cover (lists, dicts, sets, files, turtle, ...).
+     level: 'slight'  — off-syllabus item is incidental; the tested idea is covered
+            'crucial' — you must understand the off-syllabus item to answer
+            'total'   — the question is entirely about an off-syllabus item */
+  var SCOPE_WORD = { slight: 'slightly', crucial: 'crucially', total: 'totally' };
+
+  function scopeBadge(scope) {
+    var b = el('span', 'scope-badge ' + scope.level);
+    b.title = 'Out of the mid-term scope (' + (SCOPE_WORD[scope.level] || scope.level) +
+              ' out of scope): ' + scope.reason;
+    b.appendChild(el('span', 'scope-tag', 'OUT OF SCOPE'));
+    b.appendChild(el('span', 'scope-level', SCOPE_WORD[scope.level] || scope.level));
+    b.appendChild(el('span', 'scope-why', scope.reason));
+    return b;
+  }
+
   /* ------------------------------------------------------------------ state */
   var session = null;      // active exam state
   var exam = null;         // active exam definition
@@ -446,6 +464,11 @@
       if (railFilter === 'unanswered') return !answered(q);
       if (railFilter === 'mcq') return q.type === 'mcq';
       if (railFilter === 'fib') return q.type === 'fib';
+      if (railFilter === 'inscope') return !q.scope;
+      if (railFilter === 'outofscope') return !!q.scope;
+      if (railFilter === 'scope-total') return !!q.scope && q.scope.level === 'total';
+      if (railFilter === 'scope-crucial') return !!q.scope && q.scope.level === 'crucial';
+      if (railFilter === 'scope-slight') return !!q.scope && q.scope.level === 'slight';
       return true;
     });
 
@@ -502,6 +525,16 @@
     $('q-label').textContent = 'Question ' + q.n + '  (' + q.marks + ' mark' + (q.marks > 1 ? 's' : '') + ')';
     $('flag-btn').classList.toggle('on', !!session.flagged[q.n]);
     $('flag-btn').textContent = session.flagged[q.n] ? 'FLAGGED' : 'FLAG QUESTION';
+
+    // subtle out-of-scope label, top right of the question header
+    var head = $('q-head');
+    var stale = head.querySelector('.scope-badge');
+    if (stale) stale.parentNode.removeChild(stale);
+    if (q.scope) {
+      var badge = scopeBadge(q.scope);
+      var more = head.querySelector('.q-more-wrap');
+      if (more) head.insertBefore(badge, more); else head.appendChild(badge);
+    }
 
     // stem
     var stem = $('q-stem');
@@ -782,6 +815,7 @@
         r.state === 'ok' ? 'Correct' : r.state === 'bad' ? 'Incorrect' : 'Not answered');
       head.appendChild(v);
       head.appendChild(el('span', 'marks', r.marks + ' / ' + r.question.marks + ' marks'));
+      if (r.question.scope) head.appendChild(scopeBadge(r.question.scope));
       card.appendChild(head);
 
       if (r.given) {
